@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+}
+ .card {
+   width: 500px;
+   margin: auto;
+ }
+
+ .card-body {
+   text-align: left;
+ }
