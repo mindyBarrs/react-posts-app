@@ -1,18 +1,14 @@
 import React from 'react';
 
-const Navigation = ({ isSignedIn }) => {
+const Navigation = ({ onRouteChange, isSignedIn }) => {
     if ( isSignedIn ) {
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary" >
                 <p class="navbar-brand mr-auto">Posts</p>
 
-                <a href="/newPost" className="btn btn-secondary m-3" >
-                    Create a new post
-                </a>
-
-                <a href="signout" className="btn btn-secondary" >
+                <button onClick={ () => onRouteChange('signout') } href="signout" className="btn btn-secondary" >
                     Sign Out
-                </a>
+                </button>
             </nav>
         );
     } else {
@@ -20,13 +16,13 @@ const Navigation = ({ isSignedIn }) => {
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
                 <p class="navbar-brand mr-auto">Posts</p>
 
-                <a href="signin" className="btn btn-secondary m-3" >
+                <button onClick={ () => onRouteChange('signin') } className="btn btn-secondary m-3" >
                     Sign In
-                </a>
+                </button>
 
-                <a href="register" className="btn btn-secondary my-2 my-sm-0" >
+                <button onClick={ () => onRouteChange('register') } href="register" className="btn btn-secondary" >
                     Register
-                </a>
+                </button>
             </nav>
         );
     }
