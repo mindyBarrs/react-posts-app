@@ -1,11 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // COMPONENTS
 import Navigation from './components/Navigation/Navigation.js';
 import SignIn from './components/SignIn/SignIn';
 import Register from './components/Register/Register';
-import NewPost from './components/NewPost/NewPost.js';
 import Post from './components/Posts/Posts';
 
 // STYLESHEETS
@@ -33,11 +31,11 @@ class App extends React.Component {
   // SETTING UP & LOADING THE USER
   loadUser = (data) => {
     this.setState({user: {
-        id: data.id,
+        userID: data.user_id,
         name: data.name,
         email: data.email,
         entries: data.entries,
-        joinded: data.joinded
+        joinedAt: data.joined_at
     }});
   }
 
@@ -62,7 +60,7 @@ class App extends React.Component {
         <Navigation onRouteChange={this.onRouteChange} isSignedIn={ isSignedIn }/>
 
         { route === 'home'
-          ? <Post onRouteChange={ this.onRouteChange }/>
+          ? <Post user={ this.state.user } onRouteChange={ this.onRouteChange }/>
           : ( route === 'signin'
             ? <SignIn loadUser={ this.loadUser } onRouteChange={ this.onRouteChange } />
             : <Register loadUser={ this.loadUser } onRouteChange={ this.onRouteChange } />

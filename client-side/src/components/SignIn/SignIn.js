@@ -57,7 +57,7 @@ class SignIn extends React.Component {
               </div>
 
               <div className="form-group">
-                  <input onClick={ this.onSubmitSignIn } className="btn btn-outline-info" type="submit" value="Sign in"/>
+                  <input onClick={ this.onSubmitSignIn } className="btn btn-outline-primary" type="submit" value="Sign in"/>
               </div>
 
               <div className="mt-3">

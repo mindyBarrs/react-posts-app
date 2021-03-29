@@ -20,7 +20,11 @@ class NewPost extends React.Component {
     }
 
     onPublicChange = (event) => {
-        this.setState({ public: event.target.value });
+      if (event.target.value ===  '1') {
+        this.setState({ public: event.target.value});
+      }
+
+      this.setState({ public: 0});
     }
 
     /* CONNECTING TO THE SERVER */
@@ -32,52 +36,56 @@ class NewPost extends React.Component {
               'Accept': 'application/json'
             },
             body: JSON.stringify({
-                user_id: this.state.users.user_id,
-                post_title: this.state.title,
-                post_body: this.state.body,
+                userID: this.props.user.userID,
+                title: this.state.title,
+                body: this.state.body,
                 public: this.state.public
             })
         })
         .then(response => response.json())
-        .then(post => {
-            if(post.length > 0){
-                this.props.onRouteChange('home');
+        .then(posts => {
+            if (posts) {
+                this.props.loadPosts(posts);
+                this.props.show = false;
             }
         })
         .catch(error => this.setState({ error }));
     }
 
     render(){
-        return(
-            <div className="card border-info mt-5" >
-              <div class="card-header">
-                <h1>Create a new post</h1>
+        if (this.props.show) {
+          return(
+            <div className="model">
+              <div className="form-group">
+                  <label for="title">Title</label>
+                  <input onChange={ this.onTitleChange } className="form-control" name="title" id="title"/>
               </div>
 
-              <div className="card-body">
-                  <div className="form-group">
-                      <label for="title">Title</label>
-                      <input onChange={ this.onTitleChange } className="form-control" name="title" id="title"/>
-                  </div>
+              <div className="form-group">
+                  <label for="body">Body</label>
+                  <input onChange={ this.onBodyChange } className="form-control" name="body" id="body"/>
+              </div>
 
-                  <div className="form-group">
-                      <label for="body">Body</label>
-                      <input onChange={ this.onBodyChange } className="form-control" name="body" id="body"/>
-                  </div>
+              <div className="form-check">
+                  <label for="public" className="form-check-label">
+                  <input onChange={ this.onPublicChange } class="form-check-input" type="checkbox" value="1"/>
 
-                  <div className="form-check">
-                      <label for="public" className="form-check-label">
-                        <input onChange={ this.onPublicChange } class="form-check-input" type="checkbox" value="" checked="" />
+                    Would you like to make the post public
+                  </label>
+              </div>
 
-                        Would you like to make the post public
-                      </label>
-                  </div>
+              <div className="modal-footer">
+                <button onClick={ this.onSubmitPost} type="submit" className="btn btn-outline-info">Save new post</button>
 
-                  <div className="">
-                      <input onClick={ this.onSubmitPost} className="btn btn-outline-info" type="submit" value="New Post"/>
-                  </div>
+                <button type="button" className="btn btn-outline-secondary">Close</button>
               </div>
             </div>
+          );
+        }
+
+        return(
+          <div>
+          </div>
         );
     }
 }
