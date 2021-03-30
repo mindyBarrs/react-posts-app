@@ -1,10 +1,8 @@
 const handlePostsGet = (req, res, db) => {
-    const { public } = 1;
-
     db.select('*').from('posts')
-    .where({ public })
+    .where('public', '=', '1')
     .then(posts => {
-        if(posts.length){
+        if(posts){
             res.json(posts)
         }else{
             res.status(400).json('No posts have been created at this time')

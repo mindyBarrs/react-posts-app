@@ -1,5 +1,9 @@
 import React from 'react';
 
+/* LIBRARIES */
+import IsoTopeGrid from 'react-isotope';
+import Moment from 'moment';
+
 import NewPost from '../NewPost/NewPost.js';
 
 class Posts extends React.Component {
@@ -7,57 +11,56 @@ class Posts extends React.Component {
         super(props);
 
         this.state = {
-            show: false,
             user: props.user,
-            posts: {
-              title: '',
-              body: '',
-              created: '',
-            }
+            posts: []
         }
     }
 
-    // SETTING UP & LOADING THE USER
-    loadPosts = (data) => {
-      console.log(data);
-      this.setState({ posts: {
-          title: data.post_title,
-          body: data.post_body,
-          created: data.create_at,
-      }});
+    componentDidMount() {
+      fetch('http://localhost:3000/posts', {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+      })
+      .then(response => response.json())
+      .then(posts => {
+        this.setState({ posts: posts });
+      })
+      .catch(error => this.setState({ error }));
     }
 
-    showModal = () => {
-      this.setState({
-        show: true
-      });
-    };
-
     render(){
-      const { show } = this.state;
-
         return(
           <div>
             <div className="newPost">
-              <button className="btn btn-success btn-lg" onClick={ this.showModal }>
-                Create a new post
-              </button>
-
-              <NewPost show={ this.state.show } user={ this.state.user } />
+              <NewPost user={ this.state.user } />
             </div>
 
-            <div className="">
-              <div class="card border-info mb-3" >
-                <div class="card-header">
-                  Post Title
-                </div>
+            <div className="posts-layout">
+              {
+                this.state.posts ?
+                this.state.posts.map((post) => {
+                  return(
+                    <div class="card border-info mb-3" >
+                      <div class="card-header">
+                        { post.post_title }
+                      </div>
 
-                <div class="card-body">
-                  <p class="card-text">
-                    Post body
-                  </p>
-                </div>
-              </div>
+                      <div class="card-body">
+                        <p class="card-text">
+                          { post.post_body }
+                        </p>
+
+                        <p>
+                          <span class="badge badge-pill badge-primary">Date Created: { Moment(post.created_at).format('DD MMM, YYYY') }</span>
+                        </p>
+                      </div>
+                    </div>
+                  );
+                }) : "Loading..."
+              }
             </div>
           </div>
         );

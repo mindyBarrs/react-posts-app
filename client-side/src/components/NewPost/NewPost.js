@@ -20,14 +20,13 @@ class NewPost extends React.Component {
     }
 
     onPublicChange = (event) => {
-      if (event.target.value ===  '1') {
+      if (event.target.value ===  1) {
         this.setState({ public: event.target.value});
       }
 
       this.setState({ public: 0});
     }
 
-    /* CONNECTING TO THE SERVER */
     onSubmitPost = () => {
         fetch('http://localhost:3000/newPost', {
             method: 'post',
@@ -43,17 +42,11 @@ class NewPost extends React.Component {
             })
         })
         .then(response => response.json())
-        .then(posts => {
-            if (posts) {
-                this.props.loadPosts(posts);
-                this.props.show = false;
-            }
-        })
+        .then(posts => posts)
         .catch(error => this.setState({ error }));
     }
 
     render(){
-        if (this.props.show) {
           return(
             <div className="model">
               <div className="form-group">
@@ -75,18 +68,10 @@ class NewPost extends React.Component {
               </div>
 
               <div className="modal-footer">
-                <button onClick={ this.onSubmitPost} type="submit" className="btn btn-outline-info">Save new post</button>
-
-                <button type="button" className="btn btn-outline-secondary">Close</button>
+                <button onClick={ this.onSubmitPost } type="submit" className="btn btn-outline-info">Save new post</button>
               </div>
             </div>
           );
-        }
-
-        return(
-          <div>
-          </div>
-        );
     }
 }
 
